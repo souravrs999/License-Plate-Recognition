@@ -164,13 +164,6 @@ def load_class_names(namesfile):
 
 def post_processing(img, conf_thresh, nms_thresh, output):
 
-    # anchors = [12, 16, 19, 36, 40, 28, 36, 75, 76, 55,
-    # 72, 146, 142, 110, 192, 243, 459, 401]
-    # num_anchors = 9
-    # anchor_masks = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
-    # strides = [8, 16, 32]
-    # anchor_step = len(anchors) // num_anchors
-
     # [batch, num, 1, 4]
     box_array = output[0]
     # [batch, num, num_classes]
