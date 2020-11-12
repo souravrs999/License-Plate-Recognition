@@ -13,7 +13,7 @@ from tool.utils import *
 from tool.torch_utils import *
 from tool.darknet2pytorch import Darknet
 
-def run_inference(cfgfile, weightfile):
+def run_inference(cfgfile, weightfile, namesfile, source):
     model = Darknet(cfgfile)
     model.print(cfgfile)
 
@@ -34,14 +34,15 @@ def run_inference(cfgfile, weightfile):
         If you want to test it on a video uncomment
         the following add the path to the file '''
 
-    #source = ./video-playback.mp4=
+    #source = ./video-playback.mp4
     cap = cv2.VideoCapture(source):
         cap.set(3, 1280)
         cap.set(4, 720)
 
     ''' Load the labels from the .names file '''
-    class_names = load_class_names(class_names)
+    class_names = load_class_names(namesfile)
 
+    frames = 0
     while True:
         ret, img = cap.read()
 
@@ -54,17 +55,25 @@ def run_inference(cfgfile, weightfile):
         img_resized = cv2.resize(img, (model.width, model.height))
         img  = cv2.cvtColor(img_resized, cv2.COLOR_BG2RGB)
 
-        start = time.time()
         boxes = do_detect(model, img, 0.4, 0.6, cuda)
-        end = time.time()
-        print("predicted in %f seconds." % (end - start))
+
+        print("predicted in %f seconds." % (end - time.time()))
 
         ''' Returns the annotated images '''
         antd_img = plot_boxes(img, boxes[0],
                 save_name=None, class_names=class_names)
 
+        frames += 1
+
+        '''Calculate the framerate for the inference loop '''
+        print("FPS: {round(frames/time.time())}")
         cv2.imshow('Inference', antd_img)
-        cv2.waitkey(0.1)
+        key = cv2.waitkey(0.1)
+
+        ''' If the 'q' key is pressed break
+            out of the loop '''
+        if key & 0xFF == ord('q'):
+            break
 
     ''' Release the frame '''
     cap.release()
@@ -86,9 +95,23 @@ def arguments():
             help='Path to the weights file',
             dest='weightfile')
 
+    parser.add_argument('-namesfile',
+            type=str,
+            default='./cfg/classes.names',
+            help='Path to the classes name file',
+            dest='namesfile')
+
     parser.add_argument('source',
             type=int,
             default=0,
             help='Source for webcam default 0 for the built in webcam',
             dest='source')
 
+    args = parser.parse_args()
+    return args
+
+if __name__ == "__main__":
+
+    args = arguments()
+    run_infernce(args.cfgfile, args.weightfile,
+            args.namesfile, args.source)
