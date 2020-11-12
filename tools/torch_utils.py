@@ -12,7 +12,7 @@ import imghdr
 
 from tool import utils
 
-
+#Bounding box intersection over union
 def bbox_ious(boxes1, boxes2, x1y1x2y2=True):
     if x1y1x2y2:
         mx = torch.min(boxes1[0], boxes2[0])
