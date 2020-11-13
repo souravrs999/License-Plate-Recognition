@@ -10,7 +10,7 @@ import itertools
 import struct
 import imghdr
 
-from tool import utils
+from tools import utils
 
 #Bounding box intersection over union
 def bbox_ious(boxes1, boxes2, x1y1x2y2=True):
