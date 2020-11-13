@@ -8,6 +8,10 @@ Developed in an Arch environment but should work on Windows and Mac as well
 
 <img src="/screens/env.jpg" style="float: center; margin-right: 10px;" width="1000"/>
 
+### Screenshots
+
+<img src="/screens/sc1.png" style="float: left; margin-right: 10px;" width="500"/><img src="/screens/sc2.png" style="float: left; margin-right: 10px;" width="500"/>
+
 ### Installation
 
 #### Pytorch
@@ -186,23 +190,16 @@ hue=.1
 ## Credits
 
 [**Darknet**](https://github.com/AlexeyAB/darknet)
-
 YOLOv4 - Neural Networks for Object Detection (Windows and Linux version of Darknet )
 
 [**pytorch-YOLOv4**](https://github.com/Tianxiaomo/pytorch-YOLOv4)
-
 PyTorch ,ONNX and TensorRT implementation of YOLOv4
 
 [**Pytorch**](https://pytorch.org/)
-
 Tensors and Dynamic neural networks in Python with strong GPU acceleration
 
 [**OpenCV**](https://opencv.org/)
-
 Open Source Computer Vision Library
 
 [**Openalpr**](https://github.com/openalpr/openalpr)
-
 Automatic License Plate Recognition library
-
-
