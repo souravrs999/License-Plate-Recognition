@@ -10,7 +10,7 @@ Developed in an Arch environment but should work on Windows and Mac as well
 
 ### Screenshots
 
-<img src="/screens/sc1.png" style="float: left; margin-right: 10px;" width="500"/><img src="/screens/sc2.png" style="float: left; margin-right: 10px;" width="500"/>
+<img src="/screens/sc1.png" style="float: center; margin-right: 10px;" width="1000"/><img src="/screens/sc2.png" style="float: center; margin-right: 10px;" width="1000"/>
 
 ### Installation
 
@@ -142,7 +142,18 @@ Once you've completed the steps, go to the git repo you've cloned to your machin
 cd openalpr/src/bindings/python/
 sudo python3 setup.py install
 ```
-### Opimizations
+
+#### Usage
+
+```bash
+python main.py -cfgfile <path to cfg file> -weightfile <path to weight file> -namesfile <path to classes.names file> -source <path to video if you want to use video else index for webcams>
+```
+
+#### Up vote
+
+If you found this useful please upvote this repository
+
+#### Opimizations
 
 Optimize openalpr for some perfomance gains
 
@@ -187,7 +198,7 @@ exposure = 1.5
 hue=.1
 
 ```
-## Credits
+#### Credits
 
 [**Darknet**](https://github.com/AlexeyAB/darknet)
 YOLOv4 - Neural Networks for Object Detection (Windows and Linux version of Darknet )
