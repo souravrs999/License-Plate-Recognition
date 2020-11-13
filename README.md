@@ -2,43 +2,13 @@
 
 #### A yolov4 tiny model trained using Darknet and converted to pytorch to improve efficency
  
-### Screenshots
-<img src="/screens/sc1.png" style="float: left; margin-right: 10px;" width="500"/><img src="/screens/sc2.png" style="float: left; margin-right: 10px;" width="500"/>
+### Environment
+
+Developed in an Arch environment but should work on Windows and Mac as well
+<img src"/screens/env.jpg" style="float: center; margin-right: 10px;" width="1000"/>
 
 ### Installation
 
-This code was written and tested on a Linux machine but the installation steps will be similar for Windows an MacOS
-
-Clone the darknet repository
-
-```bash
-git clone https://github.com/AlexeyAB/darknet.git
-```
-Download these files and copy them to the cloned darknet repository
-
-Open the Makefile and change these lines as folows
-
-```python
-GPU=1 # 0 to 1 if you have a GPU
-CUDNN=1 # 0 to 1 if you want to use CUDNN
-CUDNN_HALF=0 # 0 to 1 if you have a higher end GPU
-OPENCV=1 # 0 to 1 to use opencv will not work if you dont set it to 1
-AVX=1 # 0 to 1 useful if you need to run it in a CPU
-OPENMP=0 # 0 to 1 (user preference)
-LIBSO=1 # 0 to 1 Important the code wont run without it will generate a libdarknet.so
-ZED_CAMERA=0 # 0 to 1 (user preference)
-ZED_CAMERA_v2_8=0 # 0 to 1 (user preference)
-
-# if using a Jetson Nano board uncomment the following(for jetson TX1)
-# ARCH= -gencode arch=compute_53,code=[sm_53,compute_53]
-
-```
-Run make
-
-```bash
-make -j4
-```
-Darknet will be compiled with GPU support
 
 ### OpenALPR https://github.com/openalpr/openalpr
 
