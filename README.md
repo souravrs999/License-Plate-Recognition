@@ -5,11 +5,12 @@
 ### Environment
 
 Developed in an Arch environment but should work on Windows and Mac as well
+
 <img src="/screens/env.jpg" style="float: center; margin-right: 10px;" width="1000"/>
 
 ### Installation
 
-Requires Pytorch
+#### Pytorch
 
 #### Install Dependencies
 
@@ -60,7 +61,34 @@ MACOSX_DEPLOYMENT_TARGET=10.9 CC=clang CXX=clang++ python setup.py install
 
 https://github.com/pytorch/pytorch#from-source
 
-OpenCV
+#### OpenCV
+On Linux
+```bash
+install deoendencies
+
+sudo apt-get update
+sudo apt-get install build-essential
+sudo apt-get install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+
+optional
+
+sudo apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-devlibtiff-dev libjasper-dev libdc1394-22-dev
+
+Build
+
+mkdir ~/src
+cd ~/src
+git clone https://github.com/opencv/opencv.git
+cd opencv
+mkdir build && cd build
+
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
+      -D CMAKE_INSTALL_PREFIX=/usr/local \
+      -D INSTALL_PYTHON_EXAMPLES=ON \
+      -D INSTALL_C_EXAMPLES=ON ..
+make -j$(nproc)
+sudo make install
+```
 ```bash
 ### OpenALPR https://github.com/openalpr/openalpr
 
