@@ -3,10 +3,14 @@ import os
 import time
 import math
 import numpy as np
-
+import cv2
 import itertools
 import struct
 import imghdr
+from openalpr import Alpr
+
+alpr = Alpr("us", "/etc/openalpr/openalpr.conf",
+            "/usr/share/openalpr/runtime_data/")
 
 
 def sigmoid(x):
@@ -107,6 +111,25 @@ def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=None):
         r = (1 - ratio) * colors[i][c] + ratio * colors[j][c]
         return int(r * 255)
 
+    def read_plate(img, x1, x2, y1, y2):
+        lp_roi = img[y1:y2, x1:x2]
+        lp_gray = cv2.cvtColor(lp_roi, cv2.COLOR_BGR2GRAY)
+        lp_res = cv2.resize(lp_gray, (100, 50))
+        lp_result = alpr.recognize_ndarray(lp_res)
+        latency = round(lp_result['processing_time_ms'], 2)
+        print("----------------------------------")
+        print(f"ocr processing time: {round(latency/1000,2)}s")
+        print("----------------------------------")
+
+        for i, plate in enumerate(lp_result['results']):
+            candidate = plate['candidates'][0]
+            print("----------------------------------")
+            print('Plate #{}: {:7s} ({:.2f}%)'.format(i,
+                candidate['plate'].upper(),
+                candidate['confidence']))
+            print("----------------------------------")
+
+
     width = img.shape[1]
     height = img.shape[0]
     for i in range(len(boxes)):
@@ -134,6 +157,10 @@ def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=None):
             img = cv2.putText(img, class_names[cls_id], (x1, y1),
                     cv2.FONT_HERSHEY_SIMPLEX, .5, rgb, 2)
         img = cv2.rectangle(img, (x1, y1), (x2, y2), rgb, 1)
+
+        if class_names[cls_id].upper() == 'PLATE':
+            read_plate(img, x1, x2, y1, y2)
+
     if savename:
         print("save plot results to %s" % savename)
         cv2.imwrite(savename, img)
