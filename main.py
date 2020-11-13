@@ -9,17 +9,17 @@ File       : main.py
 ''' Necessary imports '''
 import cv2
 import argparse
-from tool.utils import *
-from tool.torch_utils import *
-from tool.darknet2pytorch import Darknet
+from tools.utils import *
+from tools.torch_utils import *
+from tools.darknet2pytorch import Darknet
 
 def run_inference(cfgfile, weightfile, namesfile, source):
     model = Darknet(cfgfile)
-    model.print(cfgfile)
+    model.print_network()
 
     ''' Throws error if could not load weight file '''
     try:
-        model.load(weightfile)
+        model.load_weights(weightfile)
     except Exception:
         print("Could not load Weights")
 
@@ -34,10 +34,10 @@ def run_inference(cfgfile, weightfile, namesfile, source):
         If you want to test it on a video uncomment
         the following add the path to the file '''
 
-    #source = ./video-playback.mp4
-    cap = cv2.VideoCapture(source):
-        cap.set(3, 1280)
-        cap.set(4, 720)
+    source = "./videoplayback.mp4"
+    cap = cv2.VideoCapture(source)
+    cap.set(3, 1280)
+    cap.set(4, 720)
 
     ''' Load the labels from the .names file '''
     class_names = load_class_names(namesfile)
@@ -53,22 +53,23 @@ def run_inference(cfgfile, weightfile, namesfile, source):
         ''' Resize the image to those specified
         in the configuration file '''
         img_resized = cv2.resize(img, (model.width, model.height))
-        img  = cv2.cvtColor(img_resized, cv2.COLOR_BG2RGB)
+        img_rgb = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)
 
-        boxes = do_detect(model, img, 0.4, 0.6, cuda)
+        start = time.time()
+        boxes = do_detect(model, img_rgb, 0.4, 0.6, cuda)
 
-        print("predicted in %f seconds." % (end - time.time()))
+        print("predicted in %f seconds." % (time.time() - start))
 
         ''' Returns the annotated images '''
-        antd_img = plot_boxes(img, boxes[0],
-                save_name=None, class_names=class_names)
+        antd_img = plot_boxes_cv2(img, boxes[0],
+                savename=None, class_names=class_names)
 
         frames += 1
 
         '''Calculate the framerate for the inference loop '''
-        print("FPS: {round(frames/time.time())}")
+        print(f"FPS: {int(frames/(time.time()-start))}")
         cv2.imshow('Inference', antd_img)
-        key = cv2.waitkey(0.1)
+        key = cv2.waitKey(1)
 
         ''' If the 'q' key is pressed break
             out of the loop '''
@@ -81,7 +82,7 @@ def run_inference(cfgfile, weightfile, namesfile, source):
 def arguments():
 
     ''' Arguments for running infernce '''
-    parser = argparser.ArgumentParser("Arguments for running inference.")
+    parser = argparse.ArgumentParser("Arguments for running inference.")
 
     parser.add_argument('-cfgfile',
             type=str,
@@ -101,7 +102,7 @@ def arguments():
             help='Path to the classes name file',
             dest='namesfile')
 
-    parser.add_argument('source',
+    parser.add_argument('-source',
             type=int,
             default=0,
             help='Source for webcam default 0 for the built in webcam',
@@ -113,5 +114,5 @@ def arguments():
 if __name__ == "__main__":
 
     args = arguments()
-    run_infernce(args.cfgfile, args.weightfile,
+    run_inference(args.cfgfile, args.weightfile,
             args.namesfile, args.source)
