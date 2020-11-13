@@ -5,11 +5,63 @@
 ### Environment
 
 Developed in an Arch environment but should work on Windows and Mac as well
-<img src"/screens/env.jpg" style="float: center; margin-right: 10px;" width="1000"/>
+<img src="/screens/env.jpg" style="float: center; margin-right: 10px;" width="1000"/>
 
 ### Installation
 
+Requires Pytorch
 
+#### Install Dependencies
+
+Common
+```bash
+conda install numpy ninja pyyaml mkl mkl-include setuptools cmake cffi typing_extensions future six requests dataclasses
+```
+
+On Linux
+```bash
+# Add LAPACK support for the GPU if needed
+conda install -c pytorch magma-cuda102  # or [ magma-cuda101 | magma-cuda100 | magma-cuda92 ] depending on your cuda version
+```
+
+On MacOS
+```bash
+# Add these packages if torch.distributed is needed
+conda install pkg-config libuv
+```
+
+On Windows
+```bash
+# Add these packages if torch.distributed is needed.
+# Distributed package support on Windows is a prototype feature and is subject to changes.
+conda install -c conda-forge libuv=1.39
+```
+
+#### Get the PyTorch Source
+```bash
+git clone --recursive https://github.com/pytorch/pytorch
+cd pytorch
+# if you are updating an existing checkout
+git submodule sync
+git submodule update --init --recursive
+```
+
+#### Install PyTorch
+On Linux
+```bash
+export CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
+python setup.py install
+```
+On macOS
+```bash
+export CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
+MACOSX_DEPLOYMENT_TARGET=10.9 CC=clang CXX=clang++ python setup.py install
+```
+
+https://github.com/pytorch/pytorch#from-source
+
+OpenCV
+```bash
 ### OpenALPR https://github.com/openalpr/openalpr
 
 This code uses openALPR OCR to read the characters from the detected number plates
