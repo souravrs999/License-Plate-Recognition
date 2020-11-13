@@ -34,7 +34,7 @@ def run_inference(cfgfile, weightfile, namesfile, source):
         If you want to test it on a video uncomment
         the following add the path to the file '''
 
-    source = "./videoplayback.mp4"
+    #source = "./videoplayback.mp4"
     cap = cv2.VideoCapture(source)
     cap.set(3, 1280)
     cap.set(4, 720)
@@ -43,6 +43,7 @@ def run_inference(cfgfile, weightfile, namesfile, source):
     class_names = load_class_names(namesfile)
 
     frames = 0
+    fps_clock = time.time()
     while True:
         ret, img = cap.read()
 
@@ -64,11 +65,14 @@ def run_inference(cfgfile, weightfile, namesfile, source):
         antd_img = plot_boxes_cv2(img, boxes[0],
                 savename=None, class_names=class_names)
 
-        frames += 1
-
         '''Calculate the framerate for the inference loop '''
-        print(f"FPS: {int(frames/(time.time()-start))}")
+        fps = int(frames/(time.time()-fps_clock))
+        print(f"FPS: {fps}")
+
+        ''' Show the frame '''
         cv2.imshow('Inference', antd_img)
+
+        frames += 1
         key = cv2.waitKey(1)
 
         ''' If the 'q' key is pressed break
@@ -78,6 +82,7 @@ def run_inference(cfgfile, weightfile, namesfile, source):
 
     ''' Release the frame '''
     cap.release()
+    cv2.destroyAllWindows()
 
 def arguments():
 
