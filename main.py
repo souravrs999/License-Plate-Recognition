@@ -13,6 +13,17 @@ from tools.utils import *
 from tools.torch_utils import *
 from tools.darknet2pytorch import Darknet
 
+def str2int(source):
+
+    ''' Converts the source obtained from arguments
+        to int handles both videosources and webcam
+        indexed '''
+    try:
+        return int(source)
+
+    except ValueError:
+        return source
+
 def run_inference(cfgfile, weightfile, namesfile, source):
     model = Darknet(cfgfile)
     model.print_network()
@@ -30,11 +41,8 @@ def run_inference(cfgfile, weightfile, namesfile, source):
     if cuda:
         model.cuda()
 
-    ''' Grab the frame from source
-        If you want to test it on a video uncomment
-        the following add the path to the file '''
-
-    #source = "./videoplayback.mp4"
+    ''' Grab the frame from source '''
+    source = str2int(source)
     cap = cv2.VideoCapture(source)
     cap.set(3, 1280)
     cap.set(4, 720)
@@ -42,8 +50,6 @@ def run_inference(cfgfile, weightfile, namesfile, source):
     ''' Load the labels from the .names file '''
     class_names = load_class_names(namesfile)
 
-    frames = 0
-    fps_clock = time.time()
     while True:
         ret, img = cap.read()
 
@@ -66,13 +72,12 @@ def run_inference(cfgfile, weightfile, namesfile, source):
                 savename=None, class_names=class_names)
 
         '''Calculate the framerate for the inference loop '''
-        fps = int(frames/(time.time()-fps_clock))
+        fps = int(1/(time.time()-start))
         print(f"FPS: {fps}")
 
         ''' Show the frame '''
         cv2.imshow('Inference', antd_img)
 
-        frames += 1
         key = cv2.waitKey(1)
 
         ''' If the 'q' key is pressed break
@@ -108,7 +113,7 @@ def arguments():
             dest='namesfile')
 
     parser.add_argument('-source',
-            type=int,
+            type=str,
             default=0,
             help='Source for webcam default 0 for the built in webcam',
             dest='source')
