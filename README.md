@@ -198,6 +198,11 @@ exposure = 1.5
 hue=.1
 
 ```
+#### Todo
+
+1. Add video saving feature
+2. Convert model to run on a Jetson or Raberry with tensorrt or openvino
+
 #### Credits
 
 [**Darknet**](https://github.com/AlexeyAB/darknet)
