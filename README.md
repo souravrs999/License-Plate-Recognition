@@ -96,8 +96,6 @@ sudo make install
 
 #### Openalpr
 
-```bash
-
 Install openALPR for Ubuntu (Much easier and had a higher success rate)
 
 ```bash
@@ -142,9 +140,9 @@ sudo python3 setup.py install
 ```
 ### Opimizations
 
-After this step follow these to optimize openalpr's ocr for some perfomance gains
+Optimize openalpr for some perfomance gains
 
-You should modify file /etc/openalpr/openalpr.conf example below
+Modify file /etc/openalpr/openalpr.conf
 ```python
 ; This configuration file overrides the default values specified 
 ; in /usr/share/openalpr/config/openalpr.defaults.conf
@@ -152,7 +150,7 @@ hardware_acceleration = 1
 gpu_id = 0
 gpu_batch_size = 10
 ```
-You should modify file /usr/share/openalpr/openalpr.defaults.conf example below
+Modify file /usr/share/openalpr/openalpr.defaults.conf
 ```python
 max_detection_input_width = 800
 max_detection_input_height = 600
@@ -188,7 +186,11 @@ hue=.1
 ## Credits
 
 [**Darknet**](https://github.com/AlexeyAB/darknet)
+
 [**pytorch-YOLOv4**](https://github.com/Tianxiaomo/pytorch-YOLOv4)
+
 [**Pytorch**](https://pytorch.org/)
+
 [**OpenCV**](https://opencv.org/)
+
 [**Openalpr**](https://github.com/openalpr/openalpr)
