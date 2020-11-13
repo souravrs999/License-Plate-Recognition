@@ -58,24 +58,28 @@ On macOS
 export CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
 MACOSX_DEPLOYMENT_TARGET=10.9 CC=clang CXX=clang++ python setup.py install
 ```
-
-https://github.com/pytorch/pytorch#from-source
+[**More installation instructions**]https://github.com/pytorch/pytorch#from-source
 
 #### OpenCV
 On Linux
-```bash
+
 install deoendencies
 
+```bash
 sudo apt-get update
 sudo apt-get install build-essential
 sudo apt-get install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+```
 
 optional
 
+```bash
 sudo apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-devlibtiff-dev libjasper-dev libdc1394-22-dev
+```
 
 Build
 
+```bash
 mkdir ~/src
 cd ~/src
 git clone https://github.com/opencv/opencv.git
@@ -89,10 +93,10 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 make -j$(nproc)
 sudo make install
 ```
-```bash
-### OpenALPR https://github.com/openalpr/openalpr
 
-This code uses openALPR OCR to read the characters from the detected number plates
+#### Openalpr
+
+```bash
 
 Install openALPR for Ubuntu (Much easier and had a higher success rate)
 
