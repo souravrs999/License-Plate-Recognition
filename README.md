@@ -58,7 +58,7 @@ On macOS
 export CMAKE_PREFIX_PATH=${CONDA_PREFIX:-"$(dirname $(which conda))/../"}
 MACOSX_DEPLOYMENT_TARGET=10.9 CC=clang CXX=clang++ python setup.py install
 ```
-[**More installation instructions**]https://github.com/pytorch/pytorch#from-source
+[**More installation instructions**](https://github.com/pytorch/pytorch#from-source)
 
 #### OpenCV
 On Linux
@@ -133,12 +133,15 @@ sudo make install
 wget http://plates.openalpr.com/h786poj.jpg -O lp.jpg
 alpr lp.jpg
 ```
+
 Once you've completed the steps, go to the git repo you've cloned to your machine during the above installation and install the python bindings. runtime_data folder is also available in this repo, which will be helpful for next step.
 
 ```bash
 cd openalpr/src/bindings/python/
 sudo python3 setup.py install
 ```
+### Opimizations
+
 After this step follow these to optimize openalpr's ocr for some perfomance gains
 
 You should modify file /etc/openalpr/openalpr.conf example below
@@ -160,8 +163,32 @@ skip_detection = 1
 
 max_plate_angle_degrees = 30
 ```
+change the resolution in cfg/yolov4.cfg
 
+```bash
+
+[net]
+# Testing
+#batch=1
+#subdivisions=1
+# Training
+batch=64
+subdivisions=16
+width=608      #change the height and width lower resolutions
+height=608     #improve perfomance and higher resolutions 
+channels=3     #improve accuracy
+momentum=0.9
+decay=0.0005
+angle=0
+saturation = 1.5
+exposure = 1.5
+hue=.1
+
+```
 ## Credits
 
-AlexyAB for darknet
-
+[**Darknet**](https://github.com/AlexeyAB/darknet)
+[**pytorch-YOLOv4**](https://github.com/Tianxiaomo/pytorch-YOLOv4)
+[**Pytorch**](https://pytorch.org/)
+[**OpenCV**](https://opencv.org/)
+[**Openalpr**](https://github.com/openalpr/openalpr)
