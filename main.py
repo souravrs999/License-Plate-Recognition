@@ -24,7 +24,7 @@ def str2int(source):
     except ValueError:
         return source
 
-def run_inference(cfgfile, weightfile, namesfile, source):
+def run_inference(cfgfile, weightfile, namesfile, source, output):
     model = Darknet(cfgfile)
     model.print_network()
 
@@ -44,11 +44,20 @@ def run_inference(cfgfile, weightfile, namesfile, source):
     ''' Grab the frame from source '''
     source = str2int(source)
     cap = cv2.VideoCapture(source)
-    cap.set(3, 1280)
-    cap.set(4, 720)
+
+    '''Get height width and frame rate of input video '''
+    width = int(cap.get(3))
+    height = int(cap.get(4))
+    frame_rate = int(cap.get(cv2.CAP_PROP_FPS))
 
     ''' Load the labels from the .names file '''
     class_names = load_class_names(namesfile)
+
+    ''' Video writer '''
+    if output:
+        out = cv2.VideoWriter('output.mp4',
+                cv2.VideoWriter_fourcc('X','2','6','4'),
+                frame_rate, (width, height))
 
     while True:
         ret, img = cap.read()
@@ -75,6 +84,10 @@ def run_inference(cfgfile, weightfile, namesfile, source):
         fps = int(1/(time.time()-start))
         print(f"FPS: {fps}")
 
+        ''' Write frame into output.mp4 file '''
+        if output:
+            out.write(antd_img)
+
         ''' Show the frame '''
         cv2.imshow('Inference', antd_img)
 
@@ -85,8 +98,10 @@ def run_inference(cfgfile, weightfile, namesfile, source):
         if key & 0xFF == ord('q'):
             break
 
-    ''' Release the frame '''
+    ''' Release the frame and writer'''
     cap.release()
+    if output:
+        out.release()
     cv2.destroyAllWindows()
 
 def arguments():
@@ -118,6 +133,12 @@ def arguments():
             help='Source for webcam default 0 for the built in webcam',
             dest='source')
 
+    parser.add_argument('-output',
+            type=bool,
+            default=False,
+            help='True/Flase if you want to output the result video',
+            dest='output')
+
     args = parser.parse_args()
     return args
 
@@ -125,4 +146,5 @@ if __name__ == "__main__":
 
     args = arguments()
     run_inference(args.cfgfile, args.weightfile,
-            args.namesfile, args.source)
+            args.namesfile, args.source,
+            args.output)
