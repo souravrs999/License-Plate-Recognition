@@ -198,10 +198,26 @@ exposure = 1.5
 hue=.1
 
 ```
+
+#### Perfomance
+
+- GPU Tesla T4 (without OCR)
+
+| Res     | FPS (avg) |
+| ------- | --------- |
+| 800x800 |     56    |
+| 640x640 |     68    |
+| 608x608 |     72    |
+| 480x480 |     91    |
+| 416x416 |     98    |
+| 320x320 |    106    |
+
+I couldn't get Openalpr to build on colab. With ocr FPS will tank ~10fps
+
 #### Todo
 
 1. Add video saving feature
-2. Convert model to run on a Jetson or Raberry with tensorrt or openvino
+2. Save cropped plate images
 
 #### Credits
 
