@@ -41,68 +41,81 @@ def run_inference(cfgfile, weightfile, namesfile, source, output):
     if cuda:
         model.cuda()
 
-    ''' Grab the frame from source '''
-    source = str2int(source)
-    cap = cv2.VideoCapture(source)
+    ''' Switching model to eval mode and
+        setting torch.no_grad '''
+    model.eval()
+    with torch.no_grad():
 
-    '''Get height width and frame rate of input video '''
-    width = int(cap.get(3))
-    height = int(cap.get(4))
-    frame_rate = int(cap.get(cv2.CAP_PROP_FPS))
+        ''' Grab the frame from source '''
+        source = str2int(source)
+        cap = cv2.VideoCapture(source)
 
-    ''' Load the labels from the .names file '''
-    class_names = load_class_names(namesfile)
+        '''Get height width and frame rate of input video '''
+        width = int(cap.get(3))
+        height = int(cap.get(4))
+        frame_rate = int(cap.get(cv2.CAP_PROP_FPS))
 
-    ''' Video writer '''
-    if output:
-        out = cv2.VideoWriter('output.mp4',
-                cv2.VideoWriter_fourcc('X','2','6','4'),
-                frame_rate, (width, height))
+        ''' Load the labels from the .names file '''
+        class_names = load_class_names(namesfile)
 
-    while True:
-        ret, img = cap.read()
-
-        ''' Checked to see frame received successfully '''
-        if not ret:
-            exit(0)
-
-        ''' Resize the image to those specified
-        in the configuration file '''
-        img_resized = cv2.resize(img, (model.width, model.height))
-        img_rgb = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)
-
-        start = time.time()
-        boxes = do_detect(model, img_rgb, 0.4, 0.6, cuda)
-
-        print("predicted in %f seconds." % (time.time() - start))
-
-        ''' Returns the annotated images '''
-        antd_img = plot_boxes_cv2(img, boxes[0],
-                savename=None, class_names=class_names)
-
-        '''Calculate the framerate for the inference loop '''
-        fps = int(1/(time.time()-start))
-        print(f"FPS: {fps}")
-
-        ''' Write frame into output.mp4 file '''
+        ''' Video writer '''
         if output:
-            out.write(antd_img)
+            out = cv2.VideoWriter('output.mp4',
+                    cv2.VideoWriter_fourcc('X','2','6','4'),
+                    frame_rate, (width, height))
 
-        ''' Show the frame '''
-        cv2.imshow('Inference', antd_img)
+        while True:
+            ret, img = cap.read()
 
-        key = cv2.waitKey(1)
+            ''' Checked to see frame received successfully '''
+            if not ret:
+                exit(0)
 
-        ''' If the 'q' key is pressed break
-            out of the loop '''
-        if key & 0xFF == ord('q'):
-            break
+            try:
 
-    ''' Release the frame and writer'''
-    cap.release()
-    if output:
-        out.release()
-    cv2.destroyAllWindows()
+                ''' Resize the image to those specified
+                in the configuration file '''
+                img_resized = cv2.resize(img, (model.width, model.height))
+                img_rgb = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)
+
+                start = time.time()
+                boxes = do_detect(model, img_rgb, 0.3, 0.6, cuda)
+
+                print("predicted in %f seconds." % (time.time() - start))
+
+                ''' Returns the annotated images '''
+                antd_img = plot_boxes_cv2(img, boxes[0],
+                        savename=None, class_names=class_names)
+
+                '''Calculate the framerate for the inference loop '''
+                fps = int(1/(time.time()-start))
+                print(f"FPS: {fps}")
+
+            except Exception:
+                pass
+
+            ''' Write frame into output.mp4 file '''
+            if output:
+                out.write(antd_img)
+
+            ''' Implicitly create a named window '''
+            cv2.namedWindow('Inference', cv2.WINDOW_NORMAL)
+
+            ''' Show the frame '''
+            cv2.imshow('Inference', antd_img)
+
+            key = cv2.waitKey(1)
+
+            ''' If the 'q' key is pressed break
+                out of the loop '''
+            if key & 0xFF == ord('q'):
+                break
+
+        ''' Release the frame and writer'''
+        cap.release()
+        if output:
+            out.release()
+        cv2.destroyAllWindows()
 
 def arguments():
 
