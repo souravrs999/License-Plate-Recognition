@@ -216,8 +216,7 @@ I couldn't get Openalpr to build on colab. With ocr FPS will tank ~10fps
 
 #### Todo
 
-1. Add video saving feature
-2. Save cropped plate images
+1. Save cropped plate images
 
 #### Credits
 
