@@ -24,7 +24,8 @@ def str2int(source):
     except ValueError:
         return source
 
-def run_inference(cfgfile, weightfile, namesfile, source, output):
+def run_inference(cfgfile, weightfile, namesfile,
+        source, output, conf, nms):
     model = Darknet(cfgfile)
     model.print_network()
 
@@ -79,7 +80,7 @@ def run_inference(cfgfile, weightfile, namesfile, source, output):
                 img_rgb = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)
 
                 start = time.time()
-                boxes = do_detect(model, img_rgb, 0.3, 0.6, cuda)
+                boxes = do_detect(model, img_rgb, conf, nms, cuda)
 
                 print("predicted in %f seconds." % (time.time() - start))
 
@@ -152,6 +153,18 @@ def arguments():
             help='True/Flase if you want to output the result video',
             dest='output')
 
+    parser.add_argument('-conf',
+            type=float,
+            default=0.4,
+            help='Confidence threshold for inference',
+            dest='conf_thresh')
+
+    parser.add_argument('-nms',
+            type=float,
+            default=0.6,
+            help='Non maximum supression threshold',
+            dest='nms_thresh')
+
     args = parser.parse_args()
     return args
 
@@ -160,4 +173,5 @@ if __name__ == "__main__":
     args = arguments()
     run_inference(args.cfgfile, args.weightfile,
             args.namesfile, args.source,
-            args.output)
+            args.output, args.conf_thresh,
+            args.nms_thresh)
