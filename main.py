@@ -12,12 +12,13 @@ import argparse
 from tools.utils import *
 from tools.torch_utils import *
 from tools.darknet2pytorch import Darknet
+#from tools.VideoCapture import VideoCapture
 
 def str2int(source):
 
     ''' Converts the source obtained from arguments
         to int handles both videosources and webcam
-        indexed '''
+        indexes '''
     try:
         return int(source)
 
