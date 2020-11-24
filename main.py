@@ -41,7 +41,10 @@ def run_inference(cfgfile, weightfile, namesfile,
 
     ''' If GPU is available load the model onto the GPU '''
     if cuda:
+        print("CUDA found running on GPU")
         model.cuda()
+
+    print("CUDA not found running on CPU")
 
     ''' Switching model to eval mode and
         setting torch.no_grad '''
@@ -172,6 +175,8 @@ def arguments():
 if __name__ == "__main__":
 
     args = arguments()
+
+    ''' Start the inference function '''
     run_inference(args.cfgfile, args.weightfile,
             args.namesfile, args.source,
             args.output, args.conf_thresh,
