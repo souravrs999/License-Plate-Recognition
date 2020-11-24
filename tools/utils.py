@@ -122,13 +122,13 @@ def plot_boxes_cv2(img, boxes, savename=None, class_names=None, color=None):
         print("----------------------------------")
 
         for i, plate in enumerate(lp_result['results']):
-            candidate = plate['candidates'][0]
             print("----------------------------------")
-            print('Plate #{}: {:7s} ({:.2f}%)'.format(i,
-                candidate['plate'].upper(),
-                candidate['confidence']))
+            for j in range(0, 10):
+                candidate = plate['candidates'][j]
+                print('Plate #{}: {:7s} ({:.2f}%)'.format(i,
+                    candidate['plate'].upper(),
+                    candidate['confidence']))
             print("----------------------------------")
-
 
     width = img.shape[1]
     height = img.shape[0]
