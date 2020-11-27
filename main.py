@@ -26,9 +26,13 @@ def str2int(source):
         return source
 
 def run_inference(cfgfile, weightfile, namesfile,
-        source, output, conf, nms):
+        source, output, conf, nms, save_net):
     model = Darknet(cfgfile)
     model.print_network()
+
+    ''' Save network if you want to use it '''
+    if save_net:
+        model.save_weights(outfile='yolov4.pt')
 
     ''' Throws error if could not load weight file '''
     try:
@@ -169,6 +173,12 @@ def arguments():
             help='Non maximum supression threshold',
             dest='nms_thresh')
 
+    parser.add_argument('-save_weight',
+            type=bool,
+            default=False,
+            help='Save weight to pythorch format',
+            dest='save_net')
+
     args = parser.parse_args()
     return args
 
@@ -180,4 +190,4 @@ if __name__ == "__main__":
     run_inference(args.cfgfile, args.weightfile,
             args.namesfile, args.source,
             args.output, args.conf_thresh,
-            args.nms_thresh)
+            args.nms_thresh, args.save_net)
