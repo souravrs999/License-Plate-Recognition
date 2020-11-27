@@ -31,8 +31,8 @@ def run_inference(cfgfile, weightfile, namesfile,
     model.print_network()
 
     ''' Save network if you want to use it '''
-    if save_net:
-        model.save_weights(outfile='yolov4.pt')
+    if save_net != " ":
+        model.save_weights(outfile=save_net)
 
     ''' Throws error if could not load weight file '''
     try:
@@ -68,8 +68,8 @@ def run_inference(cfgfile, weightfile, namesfile,
         class_names = load_class_names(namesfile)
 
         ''' Video writer '''
-        if output:
-            out = cv2.VideoWriter('output.mp4',
+        if output != " ":
+            out = cv2.VideoWriter(output,
                     cv2.VideoWriter_fourcc('X','2','6','4'),
                     frame_rate, (width, height))
 
@@ -104,7 +104,7 @@ def run_inference(cfgfile, weightfile, namesfile,
                 pass
 
             ''' Write frame into output.mp4 file '''
-            if output:
+            if output != " ":
                 out.write(antd_img)
 
             ''' Implicitly create a named window '''
@@ -156,9 +156,9 @@ def arguments():
             dest='source')
 
     parser.add_argument('-output',
-            type=bool,
-            default=False,
-            help='True/Flase if you want to output the result video',
+            type=str,
+            default=" ",
+            help='Name of the output result video',
             dest='output')
 
     parser.add_argument('-conf',
@@ -174,9 +174,9 @@ def arguments():
             dest='nms_thresh')
 
     parser.add_argument('-save_weight',
-            type=bool,
-            default=False,
-            help='Save weight to pythorch format',
+            type=str,
+            default=" ",
+            help='Save weight to pytorch format output weight file name',
             dest='save_net')
 
     args = parser.parse_args()
