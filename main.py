@@ -43,6 +43,7 @@ def run_inference(cfgfile, weightfile, namesfile,
     ''' Check if cuda is available '''
     cuda = torch.cuda.is_available()
 
+
     ''' If GPU is available load the model onto the GPU '''
     if cuda:
         print("CUDA found running on GPU")
@@ -122,7 +123,7 @@ def run_inference(cfgfile, weightfile, namesfile,
 
         ''' Release the frame and writer'''
         cap.release()
-        if output:
+        if output != " ":
             out.release()
         cv2.destroyAllWindows()
 
