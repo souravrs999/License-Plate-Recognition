@@ -1,8 +1,9 @@
+import numba
 import torch.nn as nn
 import torch.nn.functional as F
 from tools.torch_utils import *
 
-
+@numba.njit
 def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW, noobject_scale, object_scale,
                   sil_thresh, seen):
     nB = target.size(0)
@@ -99,7 +100,6 @@ def build_targets(pred_boxes, target, anchors, num_anchors, num_classes, nH, nW,
                 nCorrect = nCorrect + 1
 
     return nGT, nCorrect, coord_mask, conf_mask, cls_mask, tx, ty, tw, th, tconf, tcls
-
 
 class RegionLoss(nn.Module):
     def __init__(self, num_classes=0, anchors=[], num_anchors=1):

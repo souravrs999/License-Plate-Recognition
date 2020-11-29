@@ -1,7 +1,9 @@
 import torch.nn as nn
 import torch.nn.functional as F
 from tools.torch_utils import *
+import numba
 
+@numba.njit
 def yolo_forward(output, conf_thresh, num_classes, anchors, num_anchors, scale_x_y, only_objectness=1,
                               validation=False):
     # Output would be invalid if it does not satisfy this assert
@@ -143,7 +145,6 @@ def yolo_forward(output, conf_thresh, num_classes, anchors, num_anchors, scale_x
     # confs: [batch, num_anchors * H * W, num_classes]
 
     return  boxes, confs
-
 
 def yolo_forward_dynamic(output, conf_thresh, num_classes, anchors, num_anchors, scale_x_y, only_objectness=1,
                               validation=False):

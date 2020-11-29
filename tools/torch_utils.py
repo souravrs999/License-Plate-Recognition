@@ -4,6 +4,8 @@ import time
 import math
 import torch
 import numpy as np
+import numba
+
 from torch.autograd import Variable
 
 import itertools
@@ -13,6 +15,7 @@ import imghdr
 from tools import utils
 
 #Bounding box intersection over union
+@numba.njit
 def bbox_ious(boxes1, boxes2, x1y1x2y2=True):
     if x1y1x2y2:
         mx = torch.min(boxes1[0], boxes2[0])
@@ -48,7 +51,6 @@ def bbox_ious(boxes1, boxes2, x1y1x2y2=True):
     uarea = area1 + area2 - carea
     return carea / uarea
 
-
 def get_region_boxes(boxes_and_confs):
 
     boxes_list = []
@@ -63,11 +65,11 @@ def get_region_boxes(boxes_and_confs):
 
     return [boxes, confs]
 
-
+@numba.njit
 def convert2cpu(gpu_matrix):
     return torch.FloatTensor(gpu_matrix.size()).copy_(gpu_matrix)
 
-
+@numba.njit
 def convert2cpu_long(gpu_matrix):
     return torch.LongTensor(gpu_matrix.size()).copy_(gpu_matrix)
 
