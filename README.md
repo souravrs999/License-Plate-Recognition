@@ -146,7 +146,11 @@ sudo python3 setup.py install
 #### Usage
 
 ```bash
-python main.py -cfgfile <path to cfg file> -weightfile <path to weight file> -namesfile <path to classes.names file> -source <path to video if you want to use video else index for webcams>
+python main.py -cfgfile <path to cfg file>\
+               -weightfile <path to weight file>\
+               -namesfile <path to classes.names file>\
+               -output <name for the output video>\
+               -source <path to video if you want to use video else index for webcams>
 ```
 
 #### Up vote
@@ -213,6 +217,13 @@ hue=.1
 | 320x320 |    106    |
 
 I couldn't get Openalpr to build on colab. With ocr FPS will tank ~10fps
+
+Added numba to optimize the inference loop a little bit its not much but its something
+there was a bit of a perfomance boost for me  while running in an Intel Pentium N3710
+especially in nms from 278avg to 177avg.
+
+If you are much more familiar with numba you can help by optimizing it much more 
+if possible i dont own a GPU currently so cant test anything out.
 
 #### Todo
 
